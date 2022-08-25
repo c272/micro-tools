@@ -17,9 +17,20 @@ COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
 echo -e "${CYAN}micro-tools setup v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 
-# Ask for the directory containing the micro:bit v2 SDK.
-echo "Enter the location of the micro:bit v2 SDK, as cloned from the 'microbit-v2-samples' repository:"
-read MICROBIT_SDK_DIRECTORY
+# Parse arguments passed in directly.
+for ARGUMENT in "$@"
+do
+    KEY=$(echo $ARGUMENT | cut -f1 -d=)
+    KEY_LENGTH=${#KEY}
+    VALUE="${ARGUMENT:$KEY_LENGTH+1}"
+    export "$KEY"="$VALUE"
+done
+
+# Ask for the directory containing the micro:bit v2 SDK, if it's not provided as an argument.
+if [[ -z ${MICROBIT_SDK_DIRECTORY+x} ]]; then
+    echo "Enter the location of the micro:bit v2 SDK, as cloned from the 'microbit-v2-samples' repository:"
+    read MICROBIT_SDK_DIRECTORY
+fi
 
 # Ensure that this directory does exist, and does contain the SDK.
 if [[ ! -d "$MICROBIT_SDK_DIRECTORY" ]]; then
