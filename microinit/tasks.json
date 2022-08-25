@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build micro:bit v2 Project",
+        "type": "shell",
+        "command": "$SCRIPT_DIR/microbuild.sh BUILD_DIRECTORY=${workspaceFolder}",
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      }
+    ]
+  }
