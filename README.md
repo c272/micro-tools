@@ -25,6 +25,13 @@ source /path/to/micro-tools/aliases.sh
 Now you're good to go! Start a new terminal instance, and you should be able to initialise projects with `microinit` and build with `microbuild`.
 
 ## Usage
+### microinstall
+This tool allows you to install the SDK from scratch, without having cloned anything else but this repository. After cloning this, you can simply run:
+```
+./microinstall.sh
+```
+And the SDK will be downloaded, installed, and configured to work with the rest of the tools & utilities in this suite. This only supports distributions with either the `apt` package manager (Debian, Ubuntu, Pop!_OS and other Debian-based) or the `xbps-install` package manager (Void Linux). This tool also isn't added as an alias, as you'll likely only want to use it once.
+
 ### microinit
 This tool allows you to set up Visual Studio Code configurations for a micro:bit v2 project, to allow you to access the APIs with Visual Studio Code's code completion and Intellisense features without the need to be inside the `microbit-v2-samples` folder, as well as the ability to automatically run `microbuild` from within Visual Studio Code's interface. To start a new project with `microinit`, do the following:
 ```bash
