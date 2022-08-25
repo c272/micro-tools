@@ -36,7 +36,7 @@ echo -e "${CYAN}Updating config with SDK directory...${NC}"
 sed -i -e "s%# export MICROBIT_SDK_DIRECTORY=%export MICROBIT_SDK_DIRECTORY=\"$MICROBIT_SDK_DIRECTORY\"%g" "$SCRIPT_DIR/config.sh"
 
 # Create the aliases file.
-echo -e "${CYAN}Creating aliases for micto-tools scripts...${NC}"
+echo -e "${CYAN}Creating aliases for micro-tools scripts...${NC}"
 cat > "$SCRIPT_DIR/aliases.sh" << EOF
 alias microbuild="$SCRIPT_DIR/microbuild.sh"
 alias microinit="$SCRIPT_DIR/microinit.sh"
