@@ -3,6 +3,8 @@ set -e
 
 # A utility script to make building micro:bit projects outside of the micro:bit v2 samples repository
 # a little bit easier.
+# Author: github.com/c272
+# License: GPLv3
 
 # Colour code setup.
 RED='\033[0;31m'
@@ -11,15 +13,15 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 
 # Print version information.
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
 COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
-echo -e "${CYAN}microbuild v0.1, (c) C272 2022${NC}"
-echo -e "${CYAN}commit: ${NC}"
+echo -e "${CYAN}microbuild v0.1 (c) C272, 2022${NC}"
+echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 
 # Run the configuration script.
-if [ -f "config.sh" ]; then
+if [ -f "$SCRIPT_DIR/config.sh" ]; then
     echo "Running configuration script..."
-    source ./config.sh
+    source "$SCRIPT_DIR/config.sh"
 fi
 
 # Parse arguments passed in directly.
@@ -43,10 +45,6 @@ if [[ ! -n "$BUILD_DIRECTORY" ]]; then
   exit -1
 fi
 
-# Trim all paths of trailing slashes.
-MICROBIT_SDK_DIRECTORY=$(echo $MICROBIT_SDK_DIRECTORY | sed 's:/*$::')
-BUILD_DIRECTORY=$(echo $BUILD_DIRECTORY | sed 's:/*$::')
-
 # Ensure that the directories exist.
 if [[ ! -d "$MICROBIT_SDK_DIRECTORY" ]]; then
   echo -e "${RED}The micro:bit v2 SDK directory provided ('$MICROBIT_SDK_DIRECTORY') does not exist.${NC}"
@@ -57,15 +55,15 @@ if [[ ! -d "$BUILD_DIRECTORY" ]]; then
   exit -1
 fi
 
+# Get absolute path of build directory, microbit SDK directory.
+MICROBIT_SDK_DIRECTORY=$(realpath "$MICROBIT_SDK_DIRECTORY")
+BUILD_DIRECTORY=$(realpath "$BUILD_DIRECTORY")
+
 # Ensure that the micro:bit SDK directory provided is *actually* an SDK directory.
 if [[ ! -f "$MICROBIT_SDK_DIRECTORY/build.py" ]]; then
   echo -e "${RED}No 'build.py' file was found in provided SDK directory ('$MICROBIT_SDK_DIRECTORY'). Are you sure this is a valid micro:bit SDK directory?${NC}"
   exit -1
 fi
-
-# Get absolute path of build directory, microbit SDK directory.
-MICROBIT_SDK_DIRECTORY=$(realpath $MICROBIT_SDK_DIRECTORY)
-BUILD_DIR_ABSOLUTE=$(realpath $BUILD_DIRECTORY)
 
 # Ensure the microbit SDK source folder/source folder symlink does not exist.
 TARGET_SOURCE_FOLDER="$MICROBIT_SDK_DIRECTORY/source"
@@ -81,7 +79,7 @@ fi
 
 # Create a symlink from the source folder to the build folder.
 echo -e "${CYAN}Symlinking build directory to SDK source directory...${NC}"
-ln -s $BUILD_DIR_ABSOLUTE $TARGET_SOURCE_FOLDER
+ln -s "$BUILD_DIRECTORY" "$TARGET_SOURCE_FOLDER"
 
 # Begin the build.
 echo -e "${CYAN}Beginning build...${NC}"
@@ -96,11 +94,11 @@ if [[ -n "$BUILD_OUTPUT_DIRECTORY" ]]; then
     echo -e "${CYAN}Copying build output to output directory...${NC}"
 
     # Ensure it exists.
-    BUILD_OUTPUT_DIR_ABSOLUTE=$(realpath $BUILD_OUTPUT_DIRECTORY)
-    mkdir -p $BUILD_OUTPUT_DIR_ABSOLUTE
+    BUILD_OUTPUT_DIRECTORY=$(realpath "$BUILD_OUTPUT_DIRECTORY")
+    mkdir -p "$BUILD_OUTPUT_DIRECTORY"
 
     # Copy the micro:bit hex file over.
-    cp -u $MICROBIT_SDK_DIRECTORY/MICROBIT.hex $BUILD_OUTPUT_DIR_ABSOLUTE
+    cp -u "$MICROBIT_SDK_DIRECTORY/MICROBIT.hex" "$BUILD_OUTPUT_DIRECTORY"
 fi
 
 echo -e "${GREEN}Build complete!${NC}"

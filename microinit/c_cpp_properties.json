@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "micro:bit v2",
+            "includePath": [
+                "/usr/local/include",
+                "$MICROBIT_SDK_DIRECTORY/libraries/codal-microbit-v2/inc/**"
+            ]
+        }
+    ]
+}
