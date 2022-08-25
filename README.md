@@ -1,4 +1,4 @@
-# `micro-tools`
+# micro-tools
 *Utilities that make working with micro:bit v2 a smoother experience.*
 
 Welcome to the `micro-tools` repository, a collection of scripts and utilities which improve the quality of life experience for working with the CODAL micro:bit v2 API. There are several tools included in this repository, the most important ones being:
@@ -25,7 +25,7 @@ source /path/to/micro-tools/aliases.sh
 Now you're good to go! Start a new terminal instance, and you should be able to initialise projects with `microinit` and build with `microbuild`.
 
 ## Usage
-### `microinit`
+### microinit
 This tool allows you to set up Visual Studio Code configurations for a micro:bit v2 project, to allow you to access the APIs with Visual Studio Code's code completion and Intellisense features without the need to be inside the `microbit-v2-samples` folder, as well as the ability to automatically run `microbuild` from within Visual Studio Code's interface. To start a new project with `microinit`, do the following:
 ```bash
 microinit my-project-name
@@ -38,7 +38,7 @@ microinit .
 ```
 Once this is done, you should be able to launch VSCode and see that include paths are properly resolved, and you can build with `microbuild` through Visual Studio Code's build system.
 
-### `microbuild`
+### microbuild
 This tool allows for the building of micro:bit v2 projects outside of the `microbit-v2-samples` source folder. To build the default directory (found in `config.sh`, by default this is simply the current directory '`.`'), simply run:
 ```bash
 microbuild
@@ -50,7 +50,7 @@ microbuild BUILD_DIRECTORY=./src BUILD_OUTPUT_DIRECTORY=./bin
 ```
 This would take `src` as the source project to build, and `bin` as the destination for the `MICROBIT.hex` file.
 
-### `config.sh`
+### config.sh
 There is a global configuration file "`config.sh`", which can be found at the root of the `micro-tools` directory which specifies default options for all of the utilities within `micro-tools`. It also defines the global location of the micro:bit v2 SDK (the `microbit-v2-samples` repository clone). If you wish to move the SDK somewhere else, you must let `micro-tools` know about the new location of the SDK, otherwise all utilities will stop working. You can do this by editing the global config value `MICROBIT_SDK_DIRECTORY`, like so:
 ```bash
 ####################
