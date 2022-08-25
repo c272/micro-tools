@@ -1,4 +1,4 @@
-# micro-tools
+# micro-tools <img alt="License Badge" align="right" src="https://img.shields.io/github/license/c272/micro-tools"><img alt="Platform Badge" align="right" src="https://img.shields.io/badge/platform-linux-blue">
 *Utilities that make working with micro:bit v2 a smoother experience.*
 
 Welcome to the `micro-tools` repository, a collection of scripts and utilities which improve the quality of life experience for working with the CODAL micro:bit v2 API. There are several tools included in this repository, the most important ones being:
