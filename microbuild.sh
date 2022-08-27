@@ -51,7 +51,7 @@ if [[ ! -d "$MICROBIT_SDK_DIRECTORY" ]]; then
   exit -1
 fi
 if [[ ! -d "$BUILD_DIRECTORY" ]]; then
-  echo -e "${RED}The micro:bit v2 SDK directory provided ('$MICROBIT_SDK_DIRECTORY') does not exist.${NC}"
+  echo -e "${RED}The build directory provided ('$BUILD_DIRECTORY') does not exist.${NC}"
   exit -1
 fi
 
