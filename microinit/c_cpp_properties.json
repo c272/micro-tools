@@ -9,7 +9,7 @@
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-microbit-v2/model/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-core/inc/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-nrf52/inc/**",
-                "$MICROBIT_SDK_DIRECTORY/utils/cmake/toolchains/ARM_GCC/**",
+                "$MICROBIT_SDK_DIRECTORY/utils/cmake/toolchains/ARM_GCC/**"
             ]
         }
     ]
