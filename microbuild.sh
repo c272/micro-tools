@@ -66,20 +66,40 @@ if [[ ! -f "$MICROBIT_SDK_DIRECTORY/build.py" ]]; then
 fi
 
 # Ensure the microbit SDK source folder/source folder symlink does not exist.
-TARGET_SOURCE_FOLDER="$MICROBIT_SDK_DIRECTORY/source"
-if [[ -L $TARGET_SOURCE_FOLDER && -d $TARGET_SOURCE_FOLDER ]]
+SDK_SOURCE_FOLDER="$MICROBIT_SDK_DIRECTORY/source"
+if [[ -L $SDK_SOURCE_FOLDER && -d $SDK_SOURCE_FOLDER ]]
 then
-    echo "Cleaning up existing source folder symlink at $TARGET_SOURCE_FOLDER..."
-    rm "$MICROBIT_SDK_DIRECTORY/source"
-elif [[ -d $TARGET_SOURCE_FOLDER ]]
+    echo "Cleaning up existing source folder symlink at $SDK_SOURCE_FOLDER..."
+    rm $SDK_SOURCE_FOLDER
+elif [[ -d $SDK_SOURCE_FOLDER ]]
 then
-    echo "Cleaning up existing source folder at $TARGET_SOURCE_FOLDER..." 
-    rm -r "$MICROBIT_SDK_DIRECTORY/source"
+    echo "Cleaning up existing source folder at $SDK_SOURCE_FOLDER..." 
+    rm -r SDK_SOURCE_FOLDER
+fi
+
+# Ensure the microbit SDK codal.json doesn't exist.
+SDK_CODAL_JSON="$MICROBIT_SDK_DIRECTORY/codal.json"
+if [[ -f $SDK_CODAL_JSON ]]
+then
+    echo "Cleaning up existing 'codal.json' at $SDK_CODAL_JSON..."
+    rm "$SDK_CODAL_JSON"
 fi
 
 # Create a symlink from the source folder to the build folder.
 echo -e "${CYAN}Symlinking build directory to SDK source directory...${NC}"
-ln -s "$BUILD_DIRECTORY" "$TARGET_SOURCE_FOLDER"
+ln -s "$BUILD_DIRECTORY" "$SDK_SOURCE_FOLDER"
+
+# Create a symlink from the build 'codal.json' to the SDK directory.
+# Does a codal.json exist from the build directory? If so, use that. Otherwise, use the default.
+DEFAULT_CODAL_JSON="$SCRIPT_DIR/microbuild/codal.json"
+if [[ -f "$BUILD_DIRECTORY/codal.json" ]] 
+then
+	echo -e "${CYAN}Symlinking build directory 'codal.json' into SDK source directory...${NC}"
+	ln -s "$BUILD_DIRECTORY/codal.json" "$SDK_CODAL_JSON"
+else
+	echo -e "${CYAN}Symlinking default 'codal.json' into SDK source directory...${NC}"
+	ln -s "$DEFAULT_CODAL_JSON" "$SDK_CODAL_JSON"
+fi
 
 # Begin the build.
 echo -e "${CYAN}Beginning build...${NC}"
