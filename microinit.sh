@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -x
 
 # Utility script to create a fresh micro:bit v2 project environment, with the appropriate VSCode
 # include directories, from an empty/new folder.
@@ -17,7 +18,7 @@ if [[ -f "$SCRIPT_DIR/config.sh" ]]; then
 fi
 
 # If the directory parameter (first parameter) doesn't exist, assume current directory.
-if [[ -z "$1" ]]; then
+if [[ ! -z "$1" ]]; then
     INIT_DIRECTORY=$1
 else
     INIT_DIRECTORY="."
