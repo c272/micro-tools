@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-set -x
 
 # Utility script to create a fresh micro:bit v2 project environment, with the appropriate VSCode
 # include directories, from an empty/new folder.
@@ -60,11 +59,11 @@ if [[ -d "$INIT_DIR_VSCODE" ]]; then
     exit -1
 fi
 
-# Create the .vscode directory, copy in the C/C++ properties JSON file & tasks.json file.
+# Create the .vscode directory, copy in the .vscode files from microinit/.
 mkdir -p "$INIT_DIR_VSCODE"
-cp "$MICROINIT_RESOURCES_DIR/c_cpp_properties.json" "$INIT_DIR_VSCODE"
-cp "$MICROINIT_RESOURCES_DIR/tasks.json" "$INIT_DIR_VSCODE"
+cp -a "$MICROINIT_RESOURCES_DIR/." "$INIT_DIR_VSCODE"
 
 # Replace all instances of bash variables inside files with the real directory.
 sed -i -e "s%\$MICROBIT_SDK_DIRECTORY%$MICROBIT_SDK_DIRECTORY%g" "$INIT_DIR_VSCODE/c_cpp_properties.json"
+sed -i -e "s%\$MICROBIT_SDK_DIRECTORY%$MICROBIT_SDK_DIRECTORY%g" "$INIT_DIR_VSCODE/launch.json"
 sed -i -e "s%\$SCRIPT_DIR%$SCRIPT_DIR%g" "$INIT_DIR_VSCODE/tasks.json"

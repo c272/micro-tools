@@ -1,0 +1,40 @@
+{
+    "configurations": [
+        {
+            "name": "micro:bit PyOCD Cortex Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "$MICROBIT_SDK_DIRECTORY/build/MICROBIT",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "pyocd",
+            "interface": "swd",
+            "device": "nrf52",
+            "targetId": "nrf52",
+            "svdFile": "$MICROBIT_SDK_DIRECTORY/libraries/codal-nrf52/nrfx/mdk/nrf52833.svd",
+            "preLaunchCommands": [
+              "load $MICROBIT_SDK_DIRECTORY/build/MICROBIT",
+              "enable breakpoint",
+              "monitor reset"
+            ]
+        },
+  
+        {
+            "name": "micro:bit OpenOCD Cortex Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "$MICROBIT_SDK_DIRECTORY/build/MICROBIT",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": [
+              "$MICROBIT_SDK_DIRECTORY/interface/cmsis-dap.cfg",
+              "$MICROBIT_SDK_DIRECTORY/target/nrf52.cfg"
+            ],
+            "interface": "swd",
+            "preLaunchCommands": [
+              "load $MICROBIT_SDK_DIRECTORY/build/MICROBIT",
+              "enable breakpoint",
+              "monitor reset"
+            ]
+        }
+    ]
+  }
