@@ -1,16 +1,39 @@
 {
+    "version": 4,
     "configurations": [
         {
             "name": "micro:bit v2",
             "includePath": [
-                "/usr/local/include",
-                "$MICROBIT_SDK_DIRECTORY/libraries/**",
+                "/usr/arm-none-eabi/include",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-microbit-v2/inc/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-microbit-v2/model/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-core/inc/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-nrf52/inc/**",
-                "$MICROBIT_SDK_DIRECTORY/utils/cmake/toolchains/ARM_GCC/**"
-            ]
+                "$MICROBIT_SDK_DIRECTORY/utils/cmake/toolchains/ARM_GCC/**",
+                "$MICROBIT_SDK_DIRECTORY/libraries/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "APP_TIMER_V2",
+                "APP_TIMER_V2_RTC1_ENABLED",
+                "NRF_DFU_TRANSPORT_BLE=1",
+                "SOFTDEVICE_PRESENT",
+                "NRF52833_XXAA",
+                "NRF52833",
+                "TARGET_MCU_NRF52833",
+                "NRF5",
+                "NRF52833",
+                "__CORTEX_M4",
+                "S113",
+                "TOOLCHAIN_GCC",
+                "__START=target_start"
+            ],
+            "intelliSenseMode": "linux-gcc-arm",
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14"
         }
     ]
 }
