@@ -51,6 +51,7 @@ echo -e "${CYAN}Creating aliases for micro-tools scripts...${NC}"
 cat > "$SCRIPT_DIR/aliases.sh" << EOF
 alias microbuild="$SCRIPT_DIR/microbuild.sh"
 alias microinit="$SCRIPT_DIR/microinit.sh"
+alias microupdate="$SCRIPT_DIR/microupdate.sh"
 EOF
 sudo chmod +x "$SCRIPT_DIR/aliases.sh"
 
