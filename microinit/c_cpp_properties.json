@@ -4,7 +4,6 @@
         {
             "name": "micro:bit v2",
             "includePath": [
-                "/usr/arm-none-eabi/include",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-microbit-v2/inc/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-microbit-v2/model/**",
                 "$MICROBIT_SDK_DIRECTORY/libraries/codal-core/inc/**",
