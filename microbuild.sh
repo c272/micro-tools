@@ -11,6 +11,8 @@ RED='\033[0;31m'
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
@@ -121,4 +123,4 @@ if [[ -n "$BUILD_OUTPUT_DIRECTORY" ]]; then
     cp -u "$MICROBIT_SDK_DIRECTORY/MICROBIT.hex" "$BUILD_OUTPUT_DIRECTORY"
 fi
 
-echo -e "${GREEN}Build complete!${NC}"
+echo -e "${GREEN}${BOLD}Build complete!${NORMAL}${NC}"

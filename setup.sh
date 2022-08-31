@@ -52,6 +52,7 @@ cat > "$SCRIPT_DIR/aliases.sh" << EOF
 alias microbuild="$SCRIPT_DIR/microbuild.sh"
 alias microinit="$SCRIPT_DIR/microinit.sh"
 alias microupdate="$SCRIPT_DIR/microupdate.sh"
+alias microflash="$SCRIPT_DIR/microflash.sh"
 EOF
 sudo chmod +x "$SCRIPT_DIR/aliases.sh"
 
