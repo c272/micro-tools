@@ -3,10 +3,11 @@
 
 Welcome to the `micro-tools` repository, a collection of scripts and utilities which improve the quality of life experience for working with the CODAL micro:bit v2 API. There are several tools included in this repository, the most important ones being:
 
-- `microbuild`: Allows for the easy building of micro:bit v2 projects anywhere in your filesystem, removing the need to place your code into the microbit-v2-samples source folder.
 - `microinit`: Sets up a micro:bit v2 project directory for Visual Studio Code, configuring the include directories, compiler options and debug settings for the local CODAL API.
+- `microbuild`: Allows for the easy building of micro:bit v2 projects anywhere in your filesystem, removing the need to place your code into the microbit-v2-samples source folder.
+- `microflash`: Facilitates the mounting, unmounting, and flashing of the micro:bit v2 in a distro-compatible way, removing the need to fiddle with manually mounting and copying to the micro:bit.
 
-The tooling in this repository is purely aimed at Linux distributions, however does not require any heavy dependencies, so should work correctly on Windows under MinGW, however that is not guaranteed, and a use case that this repository will support. These tools are all licensed under the GPLv3, so feel free to fork and contribute changes if you find something worth improving.
+The tooling in this repository is purely aimed at Linux distributions, however does not require any heavy dependencies, so should work correctly on Windows under MinGW, however that is not guaranteed, and not a use case that this repository will support. These tools are all licensed under the GPLv3, so feel free to fork and contribute changes if you find something worth improving.
 
 ## Getting Started 
 To get started using `micro-tools`, first clone the repository into a directory with user execute permissions.
@@ -56,6 +57,19 @@ To specify a directory to build when running the command, you can add the argume
 microbuild BUILD_DIRECTORY=./src BUILD_OUTPUT_DIRECTORY=./bin
 ```
 This would take `src` as the source project to build, and `bin` as the destination for the `MICROBIT.hex` file.
+
+### microflash
+This tool allows for the flashing of built micro:bit v2 projects to the micro:bit. By default, `microflash` will search for a file named `MICROBIT.hex` in the executing directory (this can be configured in `config.h` or passed in as the command line parameter `MICROBIT_HEX_FILE`), and flash this onto the microbit once mounted. You can perform this with simply:
+```bash
+microflash
+```
+
+The first time the micro:bit is flashed, it is mounted to a directory on the filesystem. By default, this is `mnt/microbit` within the scripts directory, however you can configure this directory in `config.sh` or pass it in as the command line option `MICROBIT_MOUNT_DIR`. If you want to unmount the micro:bit for whatever reason, you can simply pass `DO_UNMOUNT` to `microflash` like so:
+```bash
+microflash DO_UNMOUNT=true
+```
+
+This will unmount the micro:bit from your system, and then exit.
 
 ### config.sh
 There is a global configuration file "`config.sh`", which can be found at the root of the `micro-tools` directory which specifies default options for all of the utilities within `micro-tools`. It also defines the global location of the micro:bit v2 SDK (the `microbit-v2-samples` repository clone). If you wish to move the SDK somewhere else, you must let `micro-tools` know about the new location of the SDK, otherwise all utilities will stop working. You can do this by editing the global config value `MICROBIT_SDK_DIRECTORY`, like so:
