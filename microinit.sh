@@ -63,6 +63,18 @@ fi
 mkdir -p "$INIT_DIR_VSCODE"
 cp -a "$MICROINIT_RESOURCES_DIR/." "$INIT_DIR_VSCODE"
 
+# Add MICROBIT.hex into .gitignore in root directory, if it isn't listed already.
+TARGET_GITIGNORE="$INIT_DIRECTORY/.gitignore"
+if [[ ! -f "$TARGET_GITIGNORE" ]]; then
+    echo 'MICROBIT.hex' > $TARGET_GITIGNORE
+else
+    # There is a .gitignore, check if it already has a MICROBIT.hex entry.
+    if [[ $(grep -Fxq "MICROBIT.hex" $TARGET_GITIGNORE) != 0 ]]; then
+        # No entry, add it.
+        echo 'MICROBIT.hex' >> $TARGET_GITIGNORE
+    fi
+fi
+
 # Replace all instances of bash variables inside files with the real directory.
 sed -i -e "s%\$MICROBIT_SDK_DIRECTORY%$MICROBIT_SDK_DIRECTORY%g" "$INIT_DIR_VSCODE/c_cpp_properties.json"
 sed -i -e "s%\$MICROBIT_SDK_DIRECTORY%$MICROBIT_SDK_DIRECTORY%g" "$INIT_DIR_VSCODE/launch.json"
