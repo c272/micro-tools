@@ -14,6 +14,18 @@ NC='\033[0m'
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
+# Unmounts the micro:bit from the current mount directory.
+unmount_microbit() {
+    # Ensure directory is a mount point.
+    if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
+        sudo umount $MICROBIT_MOUNT_DIR
+        echo -e "${GREEN}${BOLD}Successfully unmounted the micro:bit.${NORMAL}${NC}"
+    else
+        echo -e "${RED}Nothing was mounted at the micro:bit mount directory ('$MICROBIT_MOUNT_DIR'), exiting.${NC}"
+        exit -1
+    fi
+}
+
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
@@ -50,15 +62,7 @@ echo "Mount directory specified as $MICROBIT_MOUNT_DIR."
 # If we just get an unmount request, try and unmount.
 if [[ ! -z "$DO_UNMOUNT" ]]; then
     echo -e "${CYAN}Attempting to unmount the micro:bit...${NC}"
-
-    # Ensure directory is a mount point.
-    if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
-        sudo umount $MICROBIT_MOUNT_DIR
-        echo -e "${GREEN}${BOLD}Successfully unmounted the micro:bit.${NORMAL}${NC}"
-    else
-        echo -e "${RED}Nothing was mounted at the micro:bit mount directory ('$MICROBIT_MOUNT_DIR'), exiting.${NC}"
-    fi
-
+    unmount_microbit
     exit 0
 fi
 
@@ -85,15 +89,15 @@ if [[ ! -L "$MICROBIT_DEVPATH" ]]; then
     exit -1
 fi
 
-# Mount micro:bit if not already mounted.
+# Re-mount the micro:bit.
 echo -e "${CYAN}Checking micro:bit mount status...${NC}"
 if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
-    echo -e "${CYAN}The micro:bit was already mounted, skipping...${NC}"
-else
-    echo -e "${CYAN}The micro:bit is currently unmounted, mounting at '$MICROBIT_MOUNT_DIR'...${NC}"
-    sudo mount "$MICROBIT_DEVPATH" "$MICROBIT_MOUNT_DIR"
-    echo -e "${CYAN}${BOLD}Successfully mounted micro:bit.${NORMAL}\n${NC}"
+    echo -e "${CYAN}The micro:bit was already mounted, unmounting for re-mount...${NC}"
+    unmount_microbit
 fi
+echo -e "${CYAN}Mounting at '$MICROBIT_MOUNT_DIR'...${NC}"
+sudo mount "$MICROBIT_DEVPATH" "$MICROBIT_MOUNT_DIR"
+echo -e "${GREEN}${BOLD}Successfully mounted the micro:bit.${NORMAL}\n${NC}"
 
 # Copy target hex file onto device.
 echo -e "${CYAN}Copying target hex file onto device...${NC}"
