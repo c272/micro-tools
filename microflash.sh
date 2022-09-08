@@ -14,17 +14,34 @@ NC='\033[0m'
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
+######################
+## HELPER FUNCTIONS ##
+######################
+
 # Unmounts the micro:bit from the current mount directory.
 unmount_microbit() {
     # Ensure directory is a mount point.
     if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
         sudo umount $MICROBIT_MOUNT_DIR
-        echo -e "${GREEN}${BOLD}Successfully unmounted the micro:bit.${NORMAL}${NC}"
     else
         echo -e "${RED}Nothing was mounted at the micro:bit mount directory ('$MICROBIT_MOUNT_DIR'), exiting.${NC}"
         exit -1
     fi
 }
+
+# Mounts the micro:bit at the configured mount directory.
+mount_microbit() {
+    # Ensure we're not already mounted.
+    if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
+        echo -e "${CYAN}The micro:bit was already mounted, unmounting for re-mount...${NC}"
+        unmount_microbit
+    fi
+    sudo mount "$MICROBIT_DEVPATH" "$MICROBIT_MOUNT_DIR"
+}
+
+################
+## ENTRYPOINT ##
+################
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
@@ -59,10 +76,27 @@ if [[ $MICROBIT_MOUNT_DIR != "/*" ]]; then
 fi
 echo "Mount directory specified as $MICROBIT_MOUNT_DIR."
 
-# If we just get an unmount request, try and unmount.
+# Make the mount directory in the tools directory, if it doesn't exist.
+mkdir -p "$MICROBIT_MOUNT_DIR"
+
+# Get micro:bit storage mount /dev/ device, ensure it exists.
+MICROBIT_DEVPATH="/dev/disk/by-label/MICROBIT"
+if [[ ! -L "$MICROBIT_DEVPATH" ]]; then
+    echo -e "${RED}No micro:bit was detected as a /dev/ device. Are you sure it is connected?${NC}"
+    exit -1
+fi
+
+# If we just get an mount/unmount request, try and do that.
 if [[ ! -z "$DO_UNMOUNT" ]]; then
     echo -e "${CYAN}Attempting to unmount the micro:bit...${NC}"
     unmount_microbit
+    echo -e "${GREEN}${BOLD}Successfully unmounted the micro:bit.${NORMAL}${NC}"
+    exit 0
+fi
+if [[ ! -z "$DO_MOUNT" ]]; then
+    echo -e "${CYAN}Attempting to mount the micro:bit...${NC}"
+    mount_microbit
+    echo -e "${GREEN}${BOLD}Successfully mounted the micro:bit.${NORMAL}\n${NC}"
     exit 0
 fi
 
@@ -79,27 +113,17 @@ fi
 # Get the real path of the file.
 MICROBIT_HEX_FILE=$(realpath "$MICROBIT_HEX_FILE")
 
-# Make the mount directory in the tools directory, if it doesn't exist.
-mkdir -p "$MICROBIT_MOUNT_DIR"
-
-# Get micro:bit storage mount /dev/ device, ensure it exists.
-MICROBIT_DEVPATH="/dev/disk/by-label/MICROBIT"
-if [[ ! -L "$MICROBIT_DEVPATH" ]]; then
-    echo -e "${RED}No micro:bit was detected as a /dev/ device. Are you sure it is connected?${NC}"
-    exit -1
-fi
-
 # Re-mount the micro:bit.
-echo -e "${CYAN}Checking micro:bit mount status...${NC}"
-if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
-    echo -e "${CYAN}The micro:bit was already mounted, unmounting for re-mount...${NC}"
-    unmount_microbit
-fi
-echo -e "${CYAN}Mounting at '$MICROBIT_MOUNT_DIR'...${NC}"
-sudo mount "$MICROBIT_DEVPATH" "$MICROBIT_MOUNT_DIR"
+echo -e "${CYAN}Mounting micro:bit at '$MICROBIT_MOUNT_DIR'...${NC}"
+mount_microbit
 echo -e "${GREEN}${BOLD}Successfully mounted the micro:bit.${NORMAL}\n${NC}"
 
 # Copy target hex file onto device.
 echo -e "${CYAN}Copying target hex file onto device...${NC}"
 sudo /bin/cp -rf $MICROBIT_HEX_FILE "$MICROBIT_MOUNT_DIR/MICROBIT.hex"
+
+# Unmount to trigger flash.
+echo -e "${CYAN}Performing flash...${NC}"
+unmount_microbit
+
 echo -e "${GREEN}${BOLD}Flashing complete!${NORMAL}${NC}"
