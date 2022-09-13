@@ -16,7 +16,14 @@ git clone https://github.com/c272/micro-tools.git
 cd micro-tools/
 ```
 
-Once this is done, run the `setup.sh` script found within this folder to configure the location of your micro:bit v2 SDK (where your `microbit-v2-samples` repository is located). This will also create an `aliases.sh` file which defines command aliases for all the scripts contained within the repository. Once this is done, source these aliases in your preferred terminal's `.****rc` file (such as `~/.bashrc`), like so:
+Once this is done, if you have **not** yet downloaded a local copy of the micro:bit v2 samples repository, you can simply run `microinstall.sh` to install and set up everything automatically.
+```
+./microinstall.sh
+```
+
+If this is not the case, and you already have a local copy of the samples repository, run the `setup.sh` script found at the root of the repository to configure the location of your micro:bit v2 SDK (where your `microbit-v2-samples` repository is located). This will also create an `aliases.sh` file which defines command aliases for all the scripts contained within the repository. 
+
+Once either of these steps are complete, you should be prompted to source an alias script file. Place the provided command in your preferred terminal's `.****rc` file (such as `~/.bashrc`), like so:
 ```bash
 ...
 source /path/to/micro-tools/aliases.sh
