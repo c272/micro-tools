@@ -76,7 +76,7 @@ then
 elif [[ -d $SDK_SOURCE_FOLDER ]]
 then
     echo "Cleaning up existing source folder at $SDK_SOURCE_FOLDER..." 
-    rm -r SDK_SOURCE_FOLDER
+    rm -r $SDK_SOURCE_FOLDER
 fi
 
 # Ensure the microbit SDK codal.json doesn't exist.
