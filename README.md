@@ -1,4 +1,4 @@
-# micro-tools <img alt="License Badge" align="right" src="https://img.shields.io/github/license/c272/micro-tools"><img alt="Platform Badge" align="right" src="https://img.shields.io/badge/platform-linux-blue">
+# micro-tools <img alt="License Badge" align="right" src="https://img.shields.io/github/license/c272/micro-tools"><img alt="Platform Badge" align="right" src="https://img.shields.io/badge/platform-linux%20%26%20darwin-blue">
 *A collection of tools to enhance the micro:bit v2 developer experience.*
 
 Welcome to the `micro-tools` repository, a collection of scripts and utilities which improve the quality of life experience for working with the CODAL micro:bit v2 API. There are several tools included in this repository, the most important ones being:
@@ -7,7 +7,7 @@ Welcome to the `micro-tools` repository, a collection of scripts and utilities w
 - `microbuild`: Allows for the easy building of micro:bit v2 projects anywhere in your filesystem, removing the need to place your code into the microbit-v2-samples source folder.
 - `microflash`: Facilitates the mounting, unmounting, and flashing of the micro:bit v2 in a distro-compatible way, removing the need to fiddle with manually mounting and copying to the micro:bit.
 
-The tooling in this repository is purely aimed at Linux distributions, however does not require any heavy dependencies, so should work correctly on Windows under MinGW, however that is not guaranteed, and not a use case that this repository will support. These tools are all licensed under the GPLv3, so feel free to fork and contribute changes if you find something worth improving.
+The tooling in this repository is aimed at **Linux** distributions and **MacOS** (tested on Apple Silicon), however does not require any heavy dependencies, so should work correctly on Windows under MinGW, however that is not guaranteed, and not a use case that this repository will support. These tools are all licensed under the GPLv3, so feel free to fork and contribute changes if you find something worth improving.
 
 ## Getting Started 
 To get started using `micro-tools`, first clone the repository into a directory with user execute permissions.
@@ -16,14 +16,18 @@ git clone https://github.com/c272/micro-tools.git
 cd micro-tools/
 ```
 
-Once this is done, if you have **not** yet downloaded a local copy of the micro:bit v2 samples repository, you can simply run `microinstall.sh` to install and set up everything automatically.
+Once this is done, if you have **not** yet downloaded a local copy of the micro:bit v2 samples repository, you can simply run `microinstall.sh` to install and set up everything automatically. This will require either `apt`, `xbps-install` or `brew` to be installed.
 ```
 ./microinstall.sh
 ```
 
-If this is not the case, and you already have a local copy of the samples repository, run the `setup.sh` script found at the root of the repository to configure the location of your micro:bit v2 SDK (where your `microbit-v2-samples` repository is located). This will also create an `aliases.sh` file which defines command aliases for all the scripts contained within the repository. 
+If this is not the case, and you already have a local copy of the samples repository, you can run `microinstall.sh` with the `DEPENDENCIES_ONLY` flag, and then run the `setup.sh` script found at the root of the repository to configure the location of your micro:bit v2 SDK (where your `microbit-v2-samples` repository is located).
+```
+./microinstall.sh DEPENDENCIES_ONLY=true
+./setup.sh
+```
 
-Once either of these steps are complete, you should be prompted to source an alias script file. Place the provided command in your preferred terminal's `.****rc` file (such as `~/.bashrc`), like so:
+Running the setup will create an `aliases.sh` file which defines command aliases for all the scripts contained within the repository. The output of the setup (through either method) should prompt you to source an alias script file upon completion. Place the provided command in your preferred terminal's `.****rc` file (such as `~/.bashrc`), like so:
 ```bash
 ...
 source /path/to/micro-tools/aliases.sh
@@ -38,7 +42,7 @@ This tool allows you to install the SDK from scratch, without having cloned anyt
 ```
 ./microinstall.sh
 ```
-And the SDK will be downloaded, installed, and configured to work with the rest of the tools & utilities in this suite. This only supports distributions with either the `apt` package manager (Debian, Ubuntu, Pop!_OS and other Debian-based) or the `xbps-install` package manager (Void Linux). This tool also isn't added as an alias, as you'll likely only want to use it once.
+And the SDK will be downloaded, installed, and configured to work with the rest of the tools & utilities in this suite. This only supports distributions with either the `apt` package manager (Debian, Ubuntu, Pop!_OS and other Debian-based), the `xbps-install` package manager (Void Linux), or `brew` (MacOS). This tool also isn't added as an alias, as you'll likely only want to use it once.
 
 ### microinit
 This tool allows you to set up Visual Studio Code configurations for a micro:bit v2 project, to allow you to access the APIs with Visual Studio Code's code completion and Intellisense features without the need to be inside the `microbit-v2-samples` folder, as well as the ability to automatically run `microbuild` from within Visual Studio Code's interface. To start a new project with `microinit`, do the following:

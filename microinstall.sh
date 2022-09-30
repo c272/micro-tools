@@ -11,12 +11,23 @@ RED='\033[0;31m'
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
 echo -e "${CYAN}microinstall v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
+
+# Parse arguments passed in directly.
+for ARGUMENT in "$@"
+do
+    KEY=$(echo $ARGUMENT | cut -f1 -d=)
+    KEY_LENGTH=${#KEY}
+    VALUE="${ARGUMENT:$KEY_LENGTH+1}"
+    export "$KEY"="$VALUE"
+done
 
 # Install dependencies for the build & setup process.
 # Supports Debian-based, Void linux & brew.
@@ -35,6 +46,12 @@ elif [[ -x "$(command -v xbps-install)" ]]; then
 else
     echo -e "${RED}Supported package manager (one of: apt, xbps-install, brew) was not found on this system.${NC}"
     exit -1
+fi
+
+# If we should only install dependencies, exit here.
+if [[ ! -z "$DEPENDENCIES_ONLY" ]]; then
+    echo -e "${GREEN}${BOLD}Successfully installed all micro-tools dependencies.${NORMAL}${NC}"
+    exit 0
 fi
 
 # Clone the samples repository.
