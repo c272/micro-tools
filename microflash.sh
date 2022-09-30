@@ -18,25 +18,63 @@ NORMAL=$(tput sgr0)
 ## HELPER FUNCTIONS ##
 ######################
 
+# Persistent path of the micro:bit /dev/ device on Linux.
+MICROBIT_DEVPATH="/dev/disk/by-label/MICROBIT"
+
 # Unmounts the micro:bit from the current mount directory.
 unmount_microbit() {
-    # Ensure directory is a mount point.
-    if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
-        sudo umount $MICROBIT_MOUNT_DIR
+    if [[ -x "$(command -v brew)" ]]; then
+        # MacOS unmount.
+        sudo diskutil unmount MICROBIT
     else
-        echo -e "${RED}Nothing was mounted at the micro:bit mount directory ('$MICROBIT_MOUNT_DIR'), exiting.${NC}"
-        exit -1
+        # Linux unmount.
+        # Ensure directory is a mount point.
+        if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
+            sudo umount $MICROBIT_MOUNT_DIR
+        else
+            echo -e "${RED}Nothing was mounted at the micro:bit mount directory ('$MICROBIT_MOUNT_DIR'), exiting.${NC}"
+            exit -1
+        fi
     fi
 }
 
 # Mounts the micro:bit at the configured mount directory.
 mount_microbit() {
-    # Ensure we're not already mounted.
-    if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
-        echo -e "${CYAN}The micro:bit was already mounted, unmounting for re-mount...${NC}"
-        unmount_microbit
+    if [[ -x "$(command -v brew)" ]]; then
+        # MacOS mount.
+        # If we're already mounted, unmount.
+        if mount | grep "on $MICROBIT_MOUNT_DIR" > /dev/null; then
+            unmount_microbit
+        fi
+        sudo diskutil mount -mountPoint "$MICROBIT_MOUNT_DIR" MICROBIT
+    else
+        # Linux mount.
+        # Ensure we're not already mounted.
+        if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
+            echo -e "${CYAN}The micro:bit was already mounted, unmounting for re-mount...${NC}"
+            unmount_microbit
+        fi
+        
+        sudo mount "$MICROBIT_DEVPATH" "$MICROBIT_MOUNT_DIR"
     fi
-    sudo mount "$MICROBIT_DEVPATH" "$MICROBIT_MOUNT_DIR"
+}
+
+# Checks if the micro:bit is connected, erroring out on fail.
+microbit_connected() {
+    if [[ -x "$(command -v brew)" ]]; then
+        # MacOS connection check.
+        if [[ ! $(diskutil info MICROBIT 2>/dev/null) ]]; then
+            echo -e "${RED}No micro:bit was detected as a /dev/ device. Are you sure it is connected?${NC}"
+            exit -1
+        fi
+    else
+        # Linux connection check.
+        # Get micro:bit storage mount /dev/ device, ensure it exists.
+        if [[ ! -L "$MICROBIT_DEVPATH" ]]; then
+            echo -e "${RED}No micro:bit was detected as a /dev/ device. Are you sure it is connected?${NC}"
+            exit -1
+        fi
+    fi
 }
 
 ################
@@ -79,12 +117,8 @@ echo "Mount directory specified as $MICROBIT_MOUNT_DIR."
 # Make the mount directory in the tools directory, if it doesn't exist.
 mkdir -p "$MICROBIT_MOUNT_DIR"
 
-# Get micro:bit storage mount /dev/ device, ensure it exists.
-MICROBIT_DEVPATH="/dev/disk/by-label/MICROBIT"
-if [[ ! -L "$MICROBIT_DEVPATH" ]]; then
-    echo -e "${RED}No micro:bit was detected as a /dev/ device. Are you sure it is connected?${NC}"
-    exit -1
-fi
+# Check if the micro:bit is connected.
+microbit_connected
 
 # If we just get an mount/unmount request, try and do that.
 if [[ ! -z "$DO_UNMOUNT" ]]; then

@@ -26,6 +26,15 @@ if [ -f "$SCRIPT_DIR/config.sh" ]; then
     source "$SCRIPT_DIR/config.sh"
 fi
 
+# Darwin-specific setup.
+# If we find GNU 'cp', alias 'cp' to it. MacOS 'cp' does not support the -u argument.
+if [[ -x "$(command -v gcp)" ]]; then
+    echo "Aliasing Darwin binaries to GNU binaries..."
+    cp() {
+        gcp "$@"
+    }
+fi
+
 # Parse arguments passed in directly.
 for ARGUMENT in "$@"
 do

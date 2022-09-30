@@ -16,6 +16,14 @@ if [[ -f "$SCRIPT_DIR/config.sh" ]]; then
     source "$SCRIPT_DIR/config.sh"
 fi
 
+# Darwin-specific setup.
+# If we find GNU sed, alias sed to it. MacOS sed has strange parameter requirements.
+if [[ -x "$(command -v gsed)" ]]; then
+    sed() {
+        gsed "$@"
+    }
+fi
+
 # If the directory parameter (first parameter) doesn't exist, assume current directory.
 if [[ ! -z "$1" ]]; then
     INIT_DIRECTORY=$1
@@ -75,7 +83,15 @@ else
     fi
 fi
 
+# Get location of Arm EABI cross compiler.
+if [[ ! -x "$(command -v arm-none-eabi-gcc)" ]]; then
+    echo -e "${RED}No ARM EABI GCC binary was found in PATH. Please ensure it is installed, and try again.${NC}"
+    exit -1
+fi
+ARM_EABI_COMPILER_PATH=$(command -v arm-none-eabi-gcc)
+
 # Replace all instances of bash variables inside files with the real directory.
 sed -i -e "s%\$MICROBIT_SDK_DIRECTORY%$MICROBIT_SDK_DIRECTORY%g" "$INIT_DIR_VSCODE/c_cpp_properties.json"
+sed -i -e "s%\$ARM_EABI_COMPILER_PATH%$ARM_EABI_COMPILER_PATH%g" "$INIT_DIR_VSCODE/c_cpp_properties.json"
 sed -i -e "s%\$MICROBIT_SDK_DIRECTORY%$MICROBIT_SDK_DIRECTORY%g" "$INIT_DIR_VSCODE/launch.json"
 sed -i -e "s%\$SCRIPT_DIR%$SCRIPT_DIR%g" "$INIT_DIR_VSCODE/tasks.json"

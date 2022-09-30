@@ -19,16 +19,21 @@ echo -e "${CYAN}microinstall v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 
 # Install dependencies for the build & setup process.
-# Supports Debian-based & Void linux.
+# Supports Debian-based, Void linux & brew.
 echo -e "${CYAN}Installing dependencies for setup & build...${NC}"
-if [[ -x "$(command -v apt)" ]]; then
+
+# Must check brew before apt, in case apt is installed via. brew...
+if [[ -x "$(command -v brew)" ]]; then
+    brew install cmake python3 coreutils gnu-sed
+    brew install --cask gcc-arm-embedded
+elif [[ -x "$(command -v apt)" ]]; then
     sudo apt install git gcc python3 cmake gcc-arm-none-eabi binutils-arm-none-eabi
 elif [[ -x "$(command -v xbps-install)" ]]; then
     sudo xbps-install -Su git python3 cmake cross-arm-none-eabi cross-arm-none-eabi-gcc \
     cross-arm-none-eabi-binutils cross-arm-none-eabi-newlib \
     cross-arm-none-eabi-libstdc++
 else
-    echo -e "${RED}Supported package manager (one of: apt, xbps-install) was not found on this system.${NC}"
+    echo -e "${RED}Supported package manager (one of: apt, xbps-install, brew) was not found on this system.${NC}"
     exit -1
 fi
 

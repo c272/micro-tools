@@ -30,7 +30,7 @@
                 "__START=target_start"
             ],
             "intelliSenseMode": "linux-gcc-arm",
-            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "compilerPath": "$ARM_EABI_COMPILER_PATH",
             "cStandard": "gnu17",
             "cppStandard": "gnu++14"
         }
