@@ -3,7 +3,7 @@
 ####################
 
 # Location of the micro:bit v2 SDK (as cloned from microbit-v2-samples).
-export MICROBIT_SDK_DIRECTORY="/Users/larry/programming/micro-tools/microbit-v2-sdk"
+# export MICROBIT_SDK_DIRECTORY=
 
 
 ########################
