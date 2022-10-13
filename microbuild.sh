@@ -112,11 +112,22 @@ else
 	ln -s "$DEFAULT_CODAL_JSON" "$SDK_CODAL_JSON"
 fi
 
+# Clear existing library symlinks.
+find $MICROBIT_SDK_DIRECTORY/libraries -type l -delete
+
+# If there is a ".microbuild" file in the build directory, add each of the given subdirectories
+# as library directories.
+if [[ -f "$BUILD_DIRECTORY/.microbuild" ]]; then
+	while IFS= read -r LINE || [[ -n "$LINE" ]]; do
+		ln -s $(realpath "$BUILD_DIRECTORY/$LINE") $MICROBIT_SDK_DIRECTORY/libraries/
+	done < "$BUILD_DIRECTORY/.microbuild"
+fi
+
 # Begin the build.
 echo -e "${CYAN}Beginning build...${NC}"
 ORIGINAL_PWD=$PWD
 cd $MICROBIT_SDK_DIRECTORY
-python3 build.py
+python3 build.py $BUILD_ARGS
 cd $ORIGINAL_PWD
 
 # Copy result of build to output folder, if specified.
