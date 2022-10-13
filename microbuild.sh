@@ -118,6 +118,7 @@ find $MICROBIT_SDK_DIRECTORY/libraries -type l -delete
 # If there is a ".microbuild" file in the build directory, add each of the given subdirectories
 # as library directories.
 if [[ -f "$BUILD_DIRECTORY/.microbuild" ]]; then
+    echo -e "${CYAN}Detected '.microbit' file, adding specified includes to CODAL environment...${NC}"
     ORIGINAL_PWD=$PWD
     cd $BUILD_DIRECTORY
   
