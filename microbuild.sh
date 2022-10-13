@@ -118,9 +118,14 @@ find $MICROBIT_SDK_DIRECTORY/libraries -type l -delete
 # If there is a ".microbuild" file in the build directory, add each of the given subdirectories
 # as library directories.
 if [[ -f "$BUILD_DIRECTORY/.microbuild" ]]; then
+    ORIGINAL_PWD=$PWD
+    cd $BUILD_DIRECTORY
+  
+    # Imports are relative to the build directory, so we moved there first.
 	while IFS= read -r LINE || [[ -n "$LINE" ]]; do
 		ln -s $(realpath "$BUILD_DIRECTORY/$LINE") $MICROBIT_SDK_DIRECTORY/libraries/
 	done < "$BUILD_DIRECTORY/.microbuild"
+    cd $ORIGINAL_PWD
 fi
 
 # Begin the build.
