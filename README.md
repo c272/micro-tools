@@ -4,7 +4,7 @@
 Welcome to the `micro-tools` repository, a collection of scripts and utilities which improve the quality of life experience for working with the CODAL micro:bit v2 API. There are several tools included in this repository, the most important ones being:
 
 - `microinit`: Sets up a micro:bit v2 project directory for Visual Studio Code, configuring the include directories, compiler options and debug settings for the local CODAL API.
-- `microbuild`: Allows for the easy building of micro:bit v2 projects anywhere in your filesystem, removing the need to place your code into the microbit-v2-samples source folder.
+- `microbuild`: Allows for the easy building of micro:bit v2 projects anywhere in your filesystem, removing the need to place your code into the microbit-v2-samples source folder, as well as simple include injection into the CODAL build system.
 - `microflash`: Facilitates the mounting, unmounting, and flashing of the micro:bit v2 in a distro-compatible way, removing the need to fiddle with manually mounting and copying to the micro:bit.
 
 The tooling in this repository is aimed at **Linux** distributions and **MacOS** (tested on Apple Silicon), however does not require any heavy dependencies, so should work correctly on Windows under MinGW, however that is not guaranteed, and not a use case that this repository will support. These tools are all licensed under the GPLv3, so feel free to fork and contribute changes if you find something worth improving.
@@ -68,6 +68,15 @@ To specify a directory to build when running the command, you can add the argume
 microbuild BUILD_DIRECTORY=./src BUILD_OUTPUT_DIRECTORY=./bin
 ```
 This would take `src` as the source project to build, and `bin` as the destination for the `MICROBIT.hex` file.
+
+#### Includes with `.microbuild`
+Along with simple builds, `microbuild` also supports injecting user-specified includes into the CODAL build system. For example, if you have a header only library such as `cereal`, you could add this to your C++ build very easily. To add additional include folders and files to your project, create a file named "`.microbuild`" in the root of your project. This should be in the folder specified by `BUILD_DIRECTORY` (usually `.`).
+
+Inside this file, place all include directories and files you wish to include, one per line. You can also use wildcard formats to specify that all the files in a given directory should be added to the base include path. Here is an example:
+```
+deps/cereal/include
+deps/EmbeddedProto/src/*
+```
 
 ### microflash
 This tool allows for the flashing of built micro:bit v2 projects to the micro:bit. By default, `microflash` will search for a file named `MICROBIT.hex` in the executing directory (this can be configured in `config.h` or passed in as the command line parameter `MICROBIT_HEX_FILE`), and flash this onto the microbit once mounted. You can perform this with simply:
