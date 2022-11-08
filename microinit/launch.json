@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "micro:bit PyOCD Cortex Debug",
-            "cwd": "${workspaceFolder}",
+            "cwd": "$MICROBIT_SDK_DIRECTORY",
             "executable": "$MICROBIT_SDK_DIRECTORY/build/MICROBIT",
             "request": "launch",
             "type": "cortex-debug",
@@ -20,7 +20,7 @@
   
         {
             "name": "micro:bit OpenOCD Cortex Debug",
-            "cwd": "${workspaceFolder}",
+            "cwd": "$MICROBIT_SDK_DIRECTORY",
             "executable": "$MICROBIT_SDK_DIRECTORY/build/MICROBIT",
             "request": "launch",
             "type": "cortex-debug",
