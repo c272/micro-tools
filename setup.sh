@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 # Script to set up all of the "micro" tools (microbuild, microinit) onto PATH, with a valid SDK installation.
 # Author: github.com/c272
@@ -16,6 +15,9 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
 echo -e "${CYAN}micro-tools setup v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
+
+# Set fail-fast errors to on.
+set -e
 
 # Darwin-specific setup.
 # If we find GNU sed, alias sed to it. MacOS sed has strange parameter requirements.

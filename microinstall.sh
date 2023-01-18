@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 # Script for installing a fresh copy of the micro:bit v2 SDK and setting up micro-tools to use it.
 # Can be used when the user does not already have a copy of the micro:bit v2 SDK installed.
@@ -19,6 +18,9 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
 echo -e "${CYAN}microinstall v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
+
+# Set fail-fast errors to on.
+set -e
 
 # Parse arguments passed in directly.
 for ARGUMENT in "$@"
