@@ -45,6 +45,8 @@ elif [[ -x "$(command -v xbps-install)" ]]; then
     sudo xbps-install -Su git python3 cmake cross-arm-none-eabi cross-arm-none-eabi-gcc \
     cross-arm-none-eabi-binutils cross-arm-none-eabi-newlib \
     cross-arm-none-eabi-libstdc++
+elif [[ -x "$(command -v pacman)" ]]; then
+    sudo pacman -S git gcc python3 cmake arm-none-eabi-gcc arm-none-eabi-binutils arm-none-eabi-newlib
 else
     echo -e "${RED}Supported package manager (one of: apt, xbps-install, brew) was not found on this system.${NC}"
     exit -1
