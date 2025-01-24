@@ -29,8 +29,8 @@ unmount_microbit() {
     else
         # Linux unmount.
         # Ensure directory is a mount point.
-        if grep -qs "$MICROBIT_MOUNT_DIR " /proc/mounts; then
-            sudo umount $MICROBIT_MOUNT_DIR
+        if grep -qs "$MICROBIT_MOUNT_DIR" /proc/mounts; then
+            sudo umount "$MICROBIT_MOUNT_DIR"
         else
             echo -e "${RED}Nothing was mounted at the micro:bit mount directory ('$MICROBIT_MOUNT_DIR'), exiting.${NC}"
             exit -1
@@ -83,7 +83,7 @@ microbit_connected() {
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
+COMMIT=$(cd "$SCRIPT_DIR" && git rev-parse HEAD)
 echo -e "${CYAN}microflash v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 
@@ -109,7 +109,7 @@ if [[ -z "$MICROBIT_MOUNT_DIR" ]]; then
 fi
 
 # Make the mount directory relative to micro-tools if provided as non-absolute.
-if [[ $MICROBIT_MOUNT_DIR != "/*" ]]; then
+if [[ "$MICROBIT_MOUNT_DIR" != "/*" ]]; then
     MICROBIT_MOUNT_DIR="$SCRIPT_DIR/$MICROBIT_MOUNT_DIR"
 fi
 echo "Mount directory specified as $MICROBIT_MOUNT_DIR."
@@ -154,7 +154,7 @@ echo -e "${GREEN}${BOLD}Successfully mounted the micro:bit.${NORMAL}\n${NC}"
 
 # Copy target hex file onto device.
 echo -e "${CYAN}Copying target hex file onto device...${NC}"
-sudo /bin/cp -rf $MICROBIT_HEX_FILE "$MICROBIT_MOUNT_DIR/MICROBIT.hex"
+sudo /bin/cp -rf "$MICROBIT_HEX_FILE" "$MICROBIT_MOUNT_DIR/MICROBIT.hex"
 
 # Unmount to trigger flash.
 echo -e "${CYAN}Performing flash...${NC}"

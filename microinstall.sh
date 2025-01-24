@@ -15,7 +15,7 @@ NORMAL=$(tput sgr0)
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
+COMMIT=$(cd "$SCRIPT_DIR" && git rev-parse HEAD)
 echo -e "${CYAN}microinstall v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 
@@ -47,6 +47,8 @@ elif [[ -x "$(command -v xbps-install)" ]]; then
     cross-arm-none-eabi-libstdc++
 elif [[ -x "$(command -v pacman)" ]]; then
     sudo pacman -S git gcc python3 cmake arm-none-eabi-gcc arm-none-eabi-binutils arm-none-eabi-newlib
+elif [[ -x "$(command -v dnf)" ]]; then
+    sudo dnf install binutils git gcc gcc-c++ python3 cmake make automake arm-none-eabi-gcc-cs arm-none-eabi-gcc-cs-c++ arm-none-eabi-binutils-cs arm-none-eabi-newlib
 else
     echo -e "${RED}Supported package manager (one of: apt, xbps-install, brew) was not found on this system.${NC}"
     exit -1
@@ -75,5 +77,5 @@ python3 build.py
 
 # Run the setup script to set up aliases, passing in the directory.
 cd "$SCRIPT_DIR"
-./setup.sh MICROBIT_SDK_DIRECTORY=$SCRIPT_DIR/microbit-v2-sdk
-cd $ORIGINAL_PWD
+./setup.sh "MICROBIT_SDK_DIRECTORY=$SCRIPT_DIR/microbit-v2-sdk"
+cd "$ORIGINAL_PWD"

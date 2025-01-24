@@ -58,7 +58,7 @@ MICROBIT_SDK_DIRECTORY=$(realpath $MICROBIT_SDK_DIRECTORY)
 
 # Get real path of target directory, microinit resources.
 INIT_DIRECTORY=$(realpath "$INIT_DIRECTORY")
-MICROINIT_RESOURCES_DIR=$SCRIPT_DIR/microinit
+MICROINIT_RESOURCES_DIR="$SCRIPT_DIR/microinit"
 
 # If there is already a Visual Studio config folder for this directory, error out.
 INIT_DIR_VSCODE="$INIT_DIRECTORY/.vscode"
@@ -74,12 +74,12 @@ cp -a "$MICROINIT_RESOURCES_DIR/." "$INIT_DIR_VSCODE"
 # Add MICROBIT.hex into .gitignore in root directory, if it isn't listed already.
 TARGET_GITIGNORE="$INIT_DIRECTORY/.gitignore"
 if [[ ! -f "$TARGET_GITIGNORE" ]]; then
-    echo 'MICROBIT.hex' > $TARGET_GITIGNORE
+    echo 'MICROBIT.hex' > "$TARGET_GITIGNORE"
 else
     # There is a .gitignore, check if it already has a MICROBIT.hex entry.
-    if [[ $(grep -Fxq "MICROBIT.hex" $TARGET_GITIGNORE) != 0 ]]; then
+    if [[ $(grep -Fxq "MICROBIT.hex" "$TARGET_GITIGNORE") != 0 ]]; then
         # No entry, add it.
-        echo 'MICROBIT.hex' >> $TARGET_GITIGNORE
+        echo 'MICROBIT.hex' >> "$TARGET_GITIGNORE"
     fi
 fi
 

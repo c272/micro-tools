@@ -80,19 +80,19 @@ fi
 
 # Ensure the microbit SDK source folder/source folder symlink does not exist.
 SDK_SOURCE_FOLDER="$MICROBIT_SDK_DIRECTORY/source"
-if [[ -L $SDK_SOURCE_FOLDER && -d $SDK_SOURCE_FOLDER ]]
+if [[ -L "$SDK_SOURCE_FOLDER" && -d "$SDK_SOURCE_FOLDER" ]]
 then
     echo "Cleaning up existing source folder symlink at $SDK_SOURCE_FOLDER..."
-    rm $SDK_SOURCE_FOLDER
-elif [[ -d $SDK_SOURCE_FOLDER ]]
+    rm "$SDK_SOURCE_FOLDER"
+elif [[ -d "$SDK_SOURCE_FOLDER" ]]
 then
     echo "Cleaning up existing source folder at $SDK_SOURCE_FOLDER..." 
-    rm -r $SDK_SOURCE_FOLDER
+    rm -r "$SDK_SOURCE_FOLDER"
 fi
 
 # Ensure the microbit SDK codal.json doesn't exist.
 SDK_CODAL_JSON="$MICROBIT_SDK_DIRECTORY/codal.json"
-if [[ -f $SDK_CODAL_JSON ]]
+if [[ -f "$SDK_CODAL_JSON" ]]
 then
     echo "Cleaning up existing 'codal.json' at $SDK_CODAL_JSON..."
     rm "$SDK_CODAL_JSON"
@@ -115,28 +115,28 @@ else
 fi
 
 # Clear existing library symlinks.
-find $MICROBIT_SDK_DIRECTORY/libraries -type l -delete
+find "$MICROBIT_SDK_DIRECTORY/libraries" -type l -delete
 
 # If there is a ".microbuild" file in the build directory, add each of the given subdirectories
 # as library directories.
 if [[ -f "$BUILD_DIRECTORY/.microbuild" ]]; then
     echo -e "${CYAN}Detected '.microbit' file, adding specified includes to CODAL environment...${NC}"
-    ORIGINAL_PWD=$PWD
-    cd $BUILD_DIRECTORY
+    ORIGINAL_PWD="$PWD"
+    cd "$BUILD_DIRECTORY"
   
     # Imports are relative to the build directory, so we moved there first.
 	while IFS= read -r LINE || [[ -n "$LINE" ]]; do
-		ln -s $(realpath "$BUILD_DIRECTORY/$LINE") $MICROBIT_SDK_DIRECTORY/libraries/
+		ln -s $(realpath "$BUILD_DIRECTORY/$LINE") "$MICROBIT_SDK_DIRECTORY/libraries/"
 	done < "$BUILD_DIRECTORY/.microbuild"
-    cd $ORIGINAL_PWD
+    cd "$ORIGINAL_PWD"
 fi
 
 # Begin the build.
 echo -e "${CYAN}Beginning build...${NC}"
-ORIGINAL_PWD=$PWD
-cd $MICROBIT_SDK_DIRECTORY
+ORIGINAL_PWD="$PWD"
+cd "$MICROBIT_SDK_DIRECTORY"
 python3 build.py $BUILD_ARGS
-cd $ORIGINAL_PWD
+cd "$ORIGINAL_PWD"
 
 # Copy result of build to output folder, if specified.
 if [[ -n "$BUILD_OUTPUT_DIRECTORY" ]]; then

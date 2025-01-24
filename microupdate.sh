@@ -15,7 +15,7 @@ NORMAL=$(tput sgr0)
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
+COMMIT=$(cd "$SCRIPT_DIR" && git rev-parse HEAD)
 echo -e "${CYAN}microupdate v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 

@@ -12,7 +12,7 @@ NC='\033[0m'
 
 # Print version information.
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-COMMIT=$(cd $SCRIPT_DIR && git rev-parse HEAD)
+COMMIT=$(cd "$SCRIPT_DIR" && git rev-parse HEAD)
 echo -e "${CYAN}micro-tools setup v0.1 (c) C272, 2022${NC}"
 echo -e "${CYAN}revision: ${COMMIT:0:10}${NC}\n"
 
@@ -58,11 +58,12 @@ sed -i -e "s%# export MICROBIT_SDK_DIRECTORY=%export MICROBIT_SDK_DIRECTORY=\"$M
 
 # Create the aliases file.
 echo -e "${CYAN}Creating aliases for micro-tools scripts...${NC}"
+ESCAPED_SCRIPT_DIR="${SCRIPT_DIR// /\\ }"
 cat > "$SCRIPT_DIR/aliases.sh" << EOF
-alias microbuild="$SCRIPT_DIR/microbuild.sh"
-alias microinit="$SCRIPT_DIR/microinit.sh"
-alias microupdate="$SCRIPT_DIR/microupdate.sh"
-alias microflash="$SCRIPT_DIR/microflash.sh"
+alias microbuild="$ESCAPED_SCRIPT_DIR/microbuild.sh"
+alias microinit="$ESCAPED_SCRIPT_DIR/microinit.sh"
+alias microupdate="$ESCAPED_SCRIPT_DIR/microupdate.sh"
+alias microflash="$ESCAPED_SCRIPT_DIR/microflash.sh"
 EOF
 sudo chmod +x "$SCRIPT_DIR/aliases.sh"
 
