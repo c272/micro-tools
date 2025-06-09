@@ -16,7 +16,7 @@ git clone https://github.com/c272/micro-tools.git
 cd micro-tools/
 ```
 
-Once this is done, if you have **not** yet downloaded a local copy of the micro:bit v2 samples repository, you can simply run `microinstall.sh` to install and set up everything automatically. This will require either `apt`, `xbps-install` or `brew` to be installed.
+Once this is done, if you have **not** yet downloaded a local copy of the micro:bit v2 samples repository, you can simply run `microinstall.sh` to install and set up everything automatically. This will require either `apt`, `xbps-install`, `pacman` or `brew` to be installed.
 ```
 ./microinstall.sh
 ```
